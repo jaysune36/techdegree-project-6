@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const qwerty = document.getElementById('qwerty');
   const phrase = document.getElementById('phrase');
   const phraseUL = phrase.querySelector('ul');
+  const scoreBoard = document.getElementById('scoreboard');
+  const scoreBoardLives = scoreBoard.querySelectorAll('img');
   let missed = 0;
 
   function getRandomPhraseAsArray(phrases) {
@@ -28,17 +30,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function checkLetter(clicked) {
     const letters = phraseUL.querySelectorAll('.letter');
+    let correctLetter = [];
     for (let i = 0; i < letters.length; i++) {
       let letter = letters[i];
-      let correctLetter;
-      if(letter.textContent.toLowerCase() === clicked.textContent) {
-        correctLetter += letter;
+      const letterContent = letter.textContent;
+      if(letterContent.toLowerCase() === clicked.textContent) {
         letter.className += ' show';
-        console.log(clicked);
+        correctLetter.push(letter);
       } else {
         return null;
       }
     }
+    return correctLetter;
   }
 
   startGame.addEventListener('click', (e) => {
@@ -54,7 +57,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const button = e.target;
       button.className = 'chosen';
       button.setAttribute('disabled', '');
-      checkLetter(button);
+      const letterFound = checkLetter(button);
+      if(letterFound === null) {
+        missed++;
+        for(let i=0; i<scoreBoardLives.length; i++) {
+          let scoreBoardLive = scoreBoardLives[i];
+          if(scoreBoardLive.getAttribute('src', 'images/liveHeart.png')) {
+            scoreBoardLive.setAttribute('src', 'images/lostHeart.png');
+            break;
+          }
+        }
+      }
     }
   })
 
