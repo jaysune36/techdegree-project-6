@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const phrase = document.getElementById('phrase');
   const phraseUL = phrase.querySelector('ul');
   const scoreBoard = document.getElementById('scoreboard');
-  const scoreBoardLives = scoreBoard.querySelectorAll('img');
+  const scoreBoardLivesImg = scoreBoard.querySelectorAll('img');
   let missed = 0;
 
   function getRandomPhraseAsArray(phrases) {
@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         phraseUL.appendChild(li);
       } else {
         li.textContent = arrInput;
+        li.className = 'space'
         phraseUL.appendChild(li);
       }
     }
@@ -30,18 +31,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function checkLetter(clicked) {
     const letters = phraseUL.querySelectorAll('.letter');
-    let correctLetter = [];
+    let correctLetter;
+    let wrongLetter;
     for (let i = 0; i < letters.length; i++) {
       let letter = letters[i];
       const letterContent = letter.textContent;
       if(letterContent.toLowerCase() === clicked.textContent) {
         letter.className += ' show';
-        correctLetter.push(letter);
+        correctLetter = letterContent;
       } else {
-        return null;
-      }
+        wrongLetter = null;
+      
     }
-    return correctLetter;
+  }
+    if(correctLetter !== undefined) {
+      return correctLetter;
+    } else {
+      return wrongLetter;
+    }
   }
 
   startGame.addEventListener('click', (e) => {
@@ -60,13 +67,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const letterFound = checkLetter(button);
       if(letterFound === null) {
         missed++;
-        for(let i=0; i<scoreBoardLives.length; i++) {
-          let scoreBoardLive = scoreBoardLives[i];
-          if(scoreBoardLive.getAttribute('src', 'images/liveHeart.png')) {
-            scoreBoardLive.setAttribute('src', 'images/lostHeart.png');
-            break;
+        for(let i=0; i<scoreBoardLivesImg.length; i++) {
+          let scoreBoardLiveImg = scoreBoardLivesImg[i];
+          if(scoreBoardLiveImg.getAttribute('src', 'images/liveHeart.png')) {
+          scoreBoardLiveImg = scoreBoardLiveImg.setAttribute('src', 'images/lostHeart.png');
+          break;
           }
-        }
+          }
       }
     }
   })
