@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const mainContainer = document.querySelector('.main-container');
   const startGame = document.querySelector('.btn__reset');
   const qwerty = document.getElementById('qwerty');
   const phrase = document.getElementById('phrase');
@@ -36,25 +37,45 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < letters.length; i++) {
       let letter = letters[i];
       const letterContent = letter.textContent;
-      if(letterContent.toLowerCase() === clicked.textContent) {
+      if (letterContent.toLowerCase() === clicked.textContent) {
         letter.className += ' show';
         correctLetter = letterContent;
       } else {
         wrongLetter = null;
-      
+
+      }
     }
-  }
-    if(correctLetter !== undefined) {
+    if (correctLetter !== undefined) {
       return correctLetter;
     } else {
       return wrongLetter;
     }
   }
 
+  function checkWin() {
+    const letterClass = phraseUL.querySelectorAll('.letter');
+    const showClass = phraseUL.querySelectorAll('.show')
+    if(showClass.length === letterClass.length) {
+      mainContainer.innerHTML = 
+      `<div id="overlay" class="win">
+      <h2 class="title">Wheel of Success</h2>
+      <a class="btn__reset">Try Again</a>
+      <h2>Congratulation! You Won!</h2>
+      </div>`
+    } else if(missed >= 5) {
+      mainContainer.innerHTML = 
+      `<div id="overlay" class="lose">
+      <h2 class="title">Wheel of Success</h2>
+      <a class="btn__reset">Try Again</a>
+      <h2>You Lost!</h2>
+      </div>`
+    }
+  }
+
   startGame.addEventListener('click', (e) => {
     const startOverly = e.target.parentNode;
     startOverly.style.display = 'none';
-    const phrases = ['I am Iron man', 'Avengers Inifinity War', 'Captian America', 'I am Groot', 'Why is Gamora'];
+    const phrases = ['I am Iron man', 'Avengers', 'Captian America', 'I am Groot', 'Why is Gamora'];
     const phraseArray = getRandomPhraseAsArray(phrases);
     addPhraseToDisplay(phraseArray);
   })
@@ -65,17 +86,13 @@ document.addEventListener('DOMContentLoaded', () => {
       button.className = 'chosen';
       button.setAttribute('disabled', '');
       const letterFound = checkLetter(button);
-      if(letterFound === null) {
+      if (letterFound === null) {
+        scoreBoardLivesImg[missed].src = 'images/lostHeart.png';
         missed++;
-        for(let i=0; i<scoreBoardLivesImg.length; i++) {
-          let scoreBoardLiveImg = scoreBoardLivesImg[i];
-          if(scoreBoardLiveImg.getAttribute('src', 'images/liveHeart.png')) {
-          scoreBoardLiveImg = scoreBoardLiveImg.setAttribute('src', 'images/lostHeart.png');
-          break;
-          }
-          }
       }
+      checkWin();
     }
   })
 
 });
+
