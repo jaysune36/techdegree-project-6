@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const mainContainer = document.querySelector('.main-container');
-  const startGame = document.querySelector('.btn__reset');
+  const overlay = document.querySelector('#overlay')
+  const gameReset = document.querySelector('.btn__reset');
   const qwerty = document.getElementById('qwerty');
   const phrase = document.getElementById('phrase');
   const phraseUL = phrase.querySelector('ul');
@@ -56,28 +56,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const letterClass = phraseUL.querySelectorAll('.letter');
     const showClass = phraseUL.querySelectorAll('.show')
     if(showClass.length === letterClass.length) {
-      mainContainer.innerHTML = 
-      `<div id="overlay" class="win">
-      <h2 class="title">Wheel of Success</h2>
+      overlay.className = 'win';
+      overlay.style.display = '';
+      overlay.innerHTML = 
+      `<h2 class="title">Wheel of Success</h2>
       <a class="btn__reset">Try Again</a>
-      <h2>Congratulation! You Won!</h2>
-      </div>`
+      <h2>Congratulation! You Won!</h2>`
     } else if(missed >= 5) {
-      mainContainer.innerHTML = 
-      `<div id="overlay" class="lose">
-      <h2 class="title">Wheel of Success</h2>
+      overlay.className = 'lose';
+      overlay.style.display = '';
+      overlay.innerHTML = 
+      `<h2 class="title">Wheel of Success</h2>
       <a class="btn__reset">Try Again</a>
-      <h2>You Lost!</h2>
-      </div>`
+      <h2>You Lost!</h2>`
     }
   }
 
-  startGame.addEventListener('click', (e) => {
-    const startOverly = e.target.parentNode;
-    startOverly.style.display = 'none';
+  overlay.addEventListener('click', (e) => {
     const phrases = ['I am Iron man', 'Avengers', 'Captian America', 'I am Groot', 'Why is Gamora'];
     const phraseArray = getRandomPhraseAsArray(phrases);
+    if(e.target.textContent === 'Start Game') {
+    const startOverly = e.target.parentNode;
+    startOverly.style.display = 'none';
     addPhraseToDisplay(phraseArray);
+    }
+    if (e.target.textContent === 'Try Again') {
+      const startOverly = e.target.parentNode;
+      startOverly.style.display = 'none';
+      phrases.innerHTML = `<ul></ul>`
+      addPhraseToDisplay(phraseArray);
+    }
   })
 
   qwerty.addEventListener('click', (e) => {
