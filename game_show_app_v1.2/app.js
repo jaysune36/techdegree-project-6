@@ -72,6 +72,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function tryAgain() {
+    const buttonsClassReset = qwerty.querySelectorAll('.chosen') 
+    phraseUL.innerHTML = `<ul></ul>`;
+    missed = 0;
+    for(let i=0; i<scoreBoardLivesImg.length; i++) {
+      let scoreBoardLifeImg = scoreBoardLivesImg[i];
+      scoreBoardLifeImg.src = 'images/liveHeart.png';
+    }
+    for(let j=0; j<buttonsClassReset.length; j++) {
+      let buttonClassReset = buttonsClassReset[j];
+      buttonClassReset.removeAttribute('class');
+      buttonClassReset.removeAttribute('disabled');
+    }
+  }
+
   overlay.addEventListener('click', (e) => {
     const phrases = ['I am Iron man', 'Avengers', 'Captian America', 'I am Groot', 'Why is Gamora'];
     const phraseArray = getRandomPhraseAsArray(phrases);
@@ -83,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.textContent === 'Try Again') {
       const startOverly = e.target.parentNode;
       startOverly.style.display = 'none';
-      phrases.innerHTML = `<ul></ul>`
+      tryAgain();
       addPhraseToDisplay(phraseArray);
     }
   })
