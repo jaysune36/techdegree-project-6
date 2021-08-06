@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const overlay = document.querySelector('#overlay')
-  const gameReset = document.querySelector('.btn__reset');
+  // const gameReset = document.querySelector('.btn__reset');
   const qwerty = document.getElementById('qwerty');
   const phrase = document.getElementById('phrase');
   const phraseUL = phrase.querySelector('ul');
@@ -15,17 +15,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function addPhraseToDisplay(arr) {
+    function setPhraseArr(element, classNameString, arrInput) {
+      element.textContent = arrInput;
+      element.className = classNameString;
+      phraseUL.appendChild(element);
+    }
     for (let i = 0; i < arr.length; i++) {
       let arrInput = arr[i];
       const li = document.createElement('li');
       if (arrInput !== ' ') {
-        li.textContent = arrInput;
-        li.className = 'letter';
-        phraseUL.appendChild(li);
+        setPhraseArr(li, 'letter', arrInput)
       } else {
-        li.textContent = arrInput;
-        li.className = 'space'
-        phraseUL.appendChild(li);
+        setPhraseArr(li, 'space', arrInput);
       }
     }
   }
@@ -36,13 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let wrongLetter;
     for (let i = 0; i < letters.length; i++) {
       let letter = letters[i];
+      letter.style.transition = 'transform 1s cubic-bezier(.78,-0.33,.16,1.25)';
       const letterContent = letter.textContent;
       if (letterContent.toLowerCase() === clicked.textContent) {
         letter.className += ' show';
+        letter.style.transform = 'scale(1.2)';
         correctLetter = letterContent;
       } else {
         wrongLetter = null;
-
       }
     }
     if (correctLetter !== undefined) {
@@ -54,25 +56,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function checkWin() {
     const letterClass = phraseUL.querySelectorAll('.letter');
-    const showClass = phraseUL.querySelectorAll('.show')
+    const showClass = phraseUL.querySelectorAll('.show');
+    function gameEndScreen(className, resultsString) {
+      overlay.className = className;
+      overlay.style.display = '';
+      overlay.innerHTML = 
+      `<h2 class="title">Wheel of Success</h2>
+      <a class="btn__reset">Try Again</a>
+      <h2>${resultsString}</h2>`
+    }
     if(showClass.length === letterClass.length) {
-      overlay.className = 'win';
-      overlay.style.display = '';
-      overlay.innerHTML = 
-      `<h2 class="title">Wheel of Success</h2>
-      <a class="btn__reset">Try Again</a>
-      <h2>Congratulation! You Won!</h2>`
+      gameEndScreen('win', 'Congratulation! You Won!')
     } else if(missed >= 5) {
-      overlay.className = 'lose';
-      overlay.style.display = '';
-      overlay.innerHTML = 
-      `<h2 class="title">Wheel of Success</h2>
-      <a class="btn__reset">Try Again</a>
-      <h2>You Lost!</h2>`
+      gameEndScreen('lose', 'You Lost!')
     }
   }
 
-  function tryAgain() {
+  function gameReset() {
     const buttonsClassReset = qwerty.querySelectorAll('.chosen') 
     phraseUL.innerHTML = `<ul></ul>`;
     missed = 0;
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.textContent === 'Try Again') {
       const startOverly = e.target.parentNode;
       startOverly.style.display = 'none';
-      tryAgain();
+      gameReset();
       addPhraseToDisplay(phraseArray);
     }
   })
