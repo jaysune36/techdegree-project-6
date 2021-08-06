@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
   const overlay = document.querySelector('#overlay')
-  // const gameReset = document.querySelector('.btn__reset');
   const qwerty = document.getElementById('qwerty');
   const phrase = document.getElementById('phrase');
   const phraseUL = phrase.querySelector('ul');
