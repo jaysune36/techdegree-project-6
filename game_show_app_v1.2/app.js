@@ -87,16 +87,17 @@ document.addEventListener('DOMContentLoaded', () => {
   overlay.addEventListener('click', (e) => {
     const phrases = ['I am Iron man', 'Avengers', 'Captian America', 'I am Groot', 'Why is Gamora'];
     const phraseArray = getRandomPhraseAsArray(phrases);
-    if (e.target.textContent === 'Start Game') {
+    function setPhraseArr() {
       const startOverly = e.target.parentNode;
       startOverly.style.display = 'none';
       addPhraseToDisplay(phraseArray);
     }
+    if (e.target.textContent === 'Start Game') {
+      setPhraseArr()
+    }
     if (e.target.textContent === 'Try Again') {
-      const startOverly = e.target.parentNode;
-      startOverly.style.display = 'none';
       gameReset();
-      addPhraseToDisplay(phraseArray);
+      setPhraseArr();
     }
   })
 
